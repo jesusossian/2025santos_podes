@@ -6,7 +6,7 @@ import numpy as np
 MAX_CPU_TIME = 3600.0
 EPSILON = 1e-6
 
-def relax_fix(partp, partr, yp_sol , yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD, SR, C):
+def relax_fix(part, yp_sol , yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD, SR, C):
 
 	yp_val = np.zeros(N)
 	yr_val = np.zeros(N)
@@ -27,11 +27,11 @@ def relax_fix(partp, partr, yp_sol , yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD
 		sr = model.addVars(list(range(N)), lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name="sr")
 				
 		for i in range(N):
-			if (partp is not None) and (i > max(partp)):
+			if (part is not None) and (i > max(part)):
 				yp[i].VType = gp.GRB.CONTINUOUS
 				yp[i].lb = 0.0
 				yp[i].ub = 1.0
-			elif (partp is not None) and (i in partp):
+			elif (part is not None) and (i in part):
 				yp[i].lb = 0.0
 				yp[i].ub = 1.0
 			else:
@@ -39,11 +39,11 @@ def relax_fix(partp, partr, yp_sol , yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD
 				yp[i].ub = yp_sol[i]
 
 		for i in range(N):
-			if (partr is not None) and (i > max(partr)):
+			if (part is not None) and (i > max(part)):
 				yr[i].VType = gp.GRB.CONTINUOUS
 				yr[i].lb = 0.0
 				yr[i].ub = 1.0
-			elif (partr is not None) and (i in partr):
+			elif (part is not None) and (i in part):
 				yr[i].lb = 0.0
 				yr[i].ub = 1.0
 			else:
@@ -73,14 +73,14 @@ def relax_fix(partp, partr, yp_sol , yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD
 		
 		model.addConstrs(xp[i] + xr[i] <= C for i in range(N))
 		
-		# Parameters 
+		# parameters 
 		model.setParam(GRB.Param.TimeLimit, MAX_CPU_TIME)
 		model.setParam(GRB.Param.MIPGap, EPSILON)
 		model.setParam(GRB.Param.Threads,1)
 		#model.setParam(GRB.Param.Cuts,-1)
 		#model.setParam(GRB.Param.Presolve,-1)
 
-		# Optimize model
+		# optimize model
 		model.optimize()
 
 		objval = model.ObjVal

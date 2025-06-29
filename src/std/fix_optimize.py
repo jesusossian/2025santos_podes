@@ -5,7 +5,7 @@ import numpy as np
 MAX_CPU_TIME = 3600.0
 EPSILON = 1e-6
 
-def fix_and_optimize(partp, partr, yp_sol, yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD, SR, C):
+def fix_optimize(part, yp_sol, yr_sol, N, PP, PR, FP, FR, HP, HR, D, R, SD, SR, C):
 
     try:
 
@@ -24,14 +24,14 @@ def fix_and_optimize(partp, partr, yp_sol, yr_sol, N, PP, PR, FP, FR, HP, HR, D,
         sr = model.addVars(list(range(N)), lb =0.0, ub = float('inf'),vtype=GRB.CONTINUOUS, name="sr")
       
         for i in range(N):
-            if (partp is not None) and (i not in partp):
+            if (part is not None) and (i not in part):
                 yp[i].lb    = yp_sol[i]
                 yp[i].ub    = yp_sol[i]
             else:
                 yp[i].start = yp_sol[i]
 
         for i in range(N):
-            if (partr is not None) and (i not in partr):
+            if (part is not None) and (i not in part):
                 yr[i].lb    = yr_sol[i]
                 yr[i].ub    = yr_sol[i]
             else:

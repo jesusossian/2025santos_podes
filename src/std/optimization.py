@@ -15,7 +15,7 @@ def clsr_std(N, PP, PR, FP, FR, HP, HR, D, R, SD, SR, C, yp_sol, yr_sol):
 	try:
 
 		# create model
-		model = gp.Model("CLSR")
+		model = gp.Model("clsr")
 
 		# create variables
 		xp = model.addVars(list(range(N)), lb=0.0, ub=float('inf'), vtype=GRB.CONTINUOUS, name="xp")
@@ -68,9 +68,9 @@ def clsr_std(N, PP, PR, FP, FR, HP, HR, D, R, SD, SR, C, yp_sol, yr_sol):
 		# optimize model
 		model.optimize()
 
-		tmp=0
+		tmp = 0
 		if model.status == GRB.OPTIMAL:
-			tmp=1
+			tmp = 1
 
 		objval = model.ObjVal
 		objbound = model.ObjBound

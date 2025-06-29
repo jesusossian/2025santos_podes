@@ -16,9 +16,7 @@ def leitura_instance(file_name):
 	R_ = [int(i) for i in arq.readline().split()]
 	C = float(arq.readline().rstrip('\n'))
 
-	#PP = [0]*N
 	PP = np.zeros(N)
-	#PR  = [0]*N
 	PR = np.zeros(N)
 	
 	FP = np.zeros(N)
